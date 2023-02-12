@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  tenpo-api:
+    container_name: "tenpo-challenge"
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - cache
+
+  db:
+    image: postgres:13.1-alpine
+    container_name: database
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: tenpo-tracks
+      POSTGRES_USER: tenpo-user
+      POSTGRES_PASSWORD: tenpo-password
+
+  cache:
+    container_name: "distributed-cache"
+    image: redis/redis-stack:6.2.6-v2
+    ports:
+      - "6379:6379"
+      - "8001:8001"

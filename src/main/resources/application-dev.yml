@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/tenpo-tracks
+    username: tenpo-user
+    password: tenpo-password
+
+  sql:
+    init:
+      mode: always

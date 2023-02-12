@@ -1,0 +1,18 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  info:
+    env:
+      enabled: true
+
+info:
+  application:
+    name: tenpo-api
+    description: application for TENPO - Backend Sr Software Engineer
+    author: Rodrigo Ripoll
+    version: '@project.version@'
+spring:
+  profiles:
+    active: dev
