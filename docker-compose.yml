@@ -1,15 +1,15 @@
 version: '3.8'
 
 services:
-  tenpo-api:
-    container_name: "tenpo-challenge"
-    build:
-      context: .
-    ports:
-      - "8080:8080"
-    depends_on:
-      - db
-      - cache
+#  tenpo-api:
+#    container_name: "tenpo-challenge"
+#    build:
+#      context: .
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - db
+#      - cache
 
   db:
     image: postgres:13.1-alpine
@@ -27,3 +27,8 @@ services:
     ports:
       - "6379:6379"
       - "8001:8001"
+
+  tenpo-tax-api:
+    image: ripollrodrigo/tenpo_tax_percentage:lastest
+    ports:
+      - "8081:8080"
