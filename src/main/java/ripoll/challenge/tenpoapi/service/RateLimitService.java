@@ -25,8 +25,8 @@ public class RateLimitService {
     }
 
     private Supplier<BucketConfiguration> getConfigSupplier() {
-        Refill refill = Refill.intervally(5, Duration.ofMinutes(1));
-        Bandwidth limit = Bandwidth.classic(5, refill);
+        Refill refill = Refill.intervally(100, Duration.ofMinutes(1));
+        Bandwidth limit = Bandwidth.classic(100, refill);
         return () -> (BucketConfiguration.builder().addLimit(limit).build());
 
     }

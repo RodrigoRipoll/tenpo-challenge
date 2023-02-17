@@ -30,6 +30,7 @@ dependencies {
 	}
 	implementation 'org.redisson:redisson-spring-boot-starter:3.19.3'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'io.hypersistence:hypersistence-utils-hibernate-60:3.2.0'
 	runtimeOnly 'org.postgresql:postgresql'
 
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
