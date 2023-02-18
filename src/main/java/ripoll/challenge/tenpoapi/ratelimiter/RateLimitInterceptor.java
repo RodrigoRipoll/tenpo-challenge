@@ -1,8 +1,7 @@
-package ripoll.challenge.tenpoapi.service;
+package ripoll.challenge.tenpoapi.ratelimiter;
 
 import io.github.bucket4j.Bucket;
 import io.github.bucket4j.ConsumptionProbe;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;

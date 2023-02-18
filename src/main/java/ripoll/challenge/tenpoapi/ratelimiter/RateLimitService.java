@@ -1,4 +1,4 @@
-package ripoll.challenge.tenpoapi.service;
+package ripoll.challenge.tenpoapi.ratelimiter;
 
 
 import io.github.bucket4j.Bandwidth;

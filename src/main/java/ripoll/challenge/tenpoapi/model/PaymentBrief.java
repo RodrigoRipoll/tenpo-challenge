@@ -1,8 +1,8 @@
 package ripoll.challenge.tenpoapi.model;
 
-public record TheResponse(
+    public record PaymentBrief(
         PaymentTransaction payments,
         Double taxes,
-        Double amount
+        Double totalAmount
 ) {
 }

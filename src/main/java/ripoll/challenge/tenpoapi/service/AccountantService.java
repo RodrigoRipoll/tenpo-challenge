@@ -2,9 +2,9 @@ package ripoll.challenge.tenpoapi.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ripoll.challenge.tenpoapi.integrations.TaxService;
+import ripoll.challenge.tenpoapi.integration.tax.TaxIntegration;
 import ripoll.challenge.tenpoapi.model.PaymentTransaction;
-import ripoll.challenge.tenpoapi.model.TheResponse;
+import ripoll.challenge.tenpoapi.model.PaymentBrief;
 
 import java.util.Optional;
 
@@ -12,17 +12,17 @@ import java.util.Optional;
 public class AccountantService {
 
     @Autowired
-    private final TaxService taxService;
+    private final TaxIntegration taxIntegration;
 
-    public AccountantService(TaxService taxService) {
-        this.taxService = taxService;
+    public AccountantService(TaxIntegration taxIntegration) {
+        this.taxIntegration = taxIntegration;
     }
 
-    public Optional<TheResponse> getTotal(PaymentTransaction paymentTransaction) throws Exception {
-        final Double taxesPercentage = taxService.getCurrentTaxAsPercentage();
+    public Optional<PaymentBrief> getPaymentBrief(PaymentTransaction paymentTransaction) {
+        final Double taxesPercentage = taxIntegration.getCurrentTaxAsPercentage();
         final double totalPaymentsBeforeTaxes = paymentTransaction.getTotalPayments();
         final Double totalWithTaxes = totalPaymentsBeforeTaxes + totalPaymentsBeforeTaxes * (taxesPercentage/100);
 
-        return Optional.of(new TheResponse(paymentTransaction, taxesPercentage, totalWithTaxes));
+        return Optional.of(new PaymentBrief(paymentTransaction, taxesPercentage, totalWithTaxes));
     }
 }
