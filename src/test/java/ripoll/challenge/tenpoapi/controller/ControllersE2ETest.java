@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ripoll.challenge.tenpoapi.controller.FinalAmountController.ENDPOINT_PAYMENTS_BRIEF;
+import static ripoll.challenge.tenpoapi.controller.PaymentController.ENDPOINT_PAYMENTS_BRIEF;
 import static ripoll.challenge.tenpoapi.controller.MockServiceMother.objectMapper;
 import static ripoll.challenge.tenpoapi.controller.RequestLogController.ENDPOINT_REQUEST_LOG_HISTORY;
 
@@ -26,6 +26,10 @@ import static ripoll.challenge.tenpoapi.controller.RequestLogController.ENDPOINT
 class ControllersE2ETest extends IntegrationTest {
 
     //TODO: analyze why separating Test in more class the testcontainers generates problems
+
+    /**
+     *  PaymentController Test Section
+     */
     @Test
     void getTotalWithTaxes_returnsInternalServerErrorWhenNoTaxInfoExistInCacheAndTaxIntegrationFail() throws Exception {
         // Arrange
@@ -109,8 +113,9 @@ class ControllersE2ETest extends IntegrationTest {
                 .andExpect(status().isBadRequest());
     }
 
-
-
+    /**
+     *  RequestLogController Test Section
+     */
     @Test
     @Order(1)
     void getRequestLogHistory_returnsOkResponse() throws Exception {

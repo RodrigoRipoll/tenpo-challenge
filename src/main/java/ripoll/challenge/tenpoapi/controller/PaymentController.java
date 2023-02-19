@@ -12,14 +12,14 @@ import ripoll.challenge.tenpoapi.service.AccountantService;
 import jakarta.validation.Valid;
 
 @RestController
-public class FinalAmountController {
+public class PaymentController {
 
     public static final String ENDPOINT_PAYMENTS_BRIEF = "/accountant/payments/brief";
 
     private final AccountantService accountantService;
 
     @Autowired
-    public FinalAmountController(AccountantService accountantService) {
+    public PaymentController(AccountantService accountantService) {
         this.accountantService = accountantService;
     }
 
