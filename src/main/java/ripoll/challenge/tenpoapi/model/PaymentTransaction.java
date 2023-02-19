@@ -1,7 +1,6 @@
 package ripoll.challenge.tenpoapi.model;
 
 import jakarta.validation.constraints.PositiveOrZero;
-
 import jakarta.validation.constraints.NotNull;
 
 public record PaymentTransaction(

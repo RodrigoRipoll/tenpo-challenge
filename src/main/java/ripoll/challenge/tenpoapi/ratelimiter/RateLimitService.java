@@ -1,26 +1,22 @@
 package ripoll.challenge.tenpoapi.ratelimiter;
 
-
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
 import io.github.bucket4j.BucketConfiguration;
 import io.github.bucket4j.Refill;
 import io.github.bucket4j.distributed.proxy.ProxyManager;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.util.function.Supplier;
 
-@Service
 public class RateLimitService {
 
     @Value("${rate-limit.rpm}")
     private long rpmAllowed;
 
     final ProxyManager<String> proxyManager;
-    @Autowired
+
     public RateLimitService(ProxyManager<String> proxyManager) {
         this.proxyManager = proxyManager;
     }

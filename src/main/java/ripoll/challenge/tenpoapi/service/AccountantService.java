@@ -1,19 +1,15 @@
 package ripoll.challenge.tenpoapi.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import ripoll.challenge.tenpoapi.integration.tax.TaxIntegration;
 import ripoll.challenge.tenpoapi.model.PaymentBrief;
 import ripoll.challenge.tenpoapi.model.PaymentTransaction;
 
 import java.util.Optional;
 
-@Service
 public class AccountantService {
 
     private final TaxIntegration taxIntegration;
 
-    @Autowired
     public AccountantService(TaxIntegration taxIntegration) {
         this.taxIntegration = taxIntegration;
     }

@@ -4,6 +4,7 @@ Here I present my resolution to the Backend Challenge.
 
 Sections:
 - [Running the application](#run-the-app)
+- [Testing](#Unit-test-and-E2E)
 - [OpenAPI Specification and Postman](#openapi-specification-and-postman)
 - [Challenge Specifications - e-mail](#challenge-specifications)
 
@@ -23,13 +24,13 @@ In the root folder we have a docker-compose:
          it will take the default** configuration which is where we have the **"productive" values**.
 
           ```
-              |                       	|       dev      	|      prod - default       |
+              |                       	|       dev      	|      prod - default   	|
               |-----------------------	|:--------------:	|:---------------------:	|
               | rate limit            	|      15rpm     	|        3000rpm        	|
               | time to retry         	| 5s - 10s - 20s 	| 100ms - 200ms - 400ms 	|
               | cache in memory "tax" 	|       4m       	|           2h          	|
               | expiration tax        	|       2m       	|         30min         	|
-              | file .yml             	|application-dev.yml|     application.yml     	|
+              | file .yml		        |application-dev.yml	|     application.yml		|
 
     - The `port 8080` of **the TENPO API** is exposed to be able to interact with it through `localhost:8080`
     - The `port 8081` of **the Auxiliary Tax API** is exposed to be able to interact with it through `localhost:8081`
@@ -38,6 +39,12 @@ In the root folder we have a docker-compose:
         - url: jdbc:postgresql://localhost:5432/tenpo-tracks
         - username: tenpo-user
         - password: tenpo-password
+
+<br><br>
+## Unit test and E2E
+
+**Important!! TestContainers** are used for E2E testing, if Docker is not enabled and configured correctly and 
+the tests may fail. Link to cases on [Mac M1](https://intellij-support.jetbrains.com/hc/en-us/community/posts/7763242546066-Could-not-find-a-valid-Docker-environment-issue).
 
 <br><br>
 ## OpenAPI Specification and Postman
