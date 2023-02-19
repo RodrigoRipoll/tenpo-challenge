@@ -6,7 +6,7 @@ services:
     build:
       context: .
     environment:
-      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_PROFILES_ACTIVE=
       - redisUrlConnection=redis://distributed-cache:6379
       - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/tenpo-tracks
       - SPRING_DATASOURCE_USERNAME=tenpo-user

@@ -39,7 +39,7 @@ resilience4j:
         permitted-number-of-calls-in-half-open-state: 5
         sliding-window-type: count-based
         sliding-window-size: 5
-        minimum-number-of-calls: 5
+        minimum-number-of-calls: 10
         slow-call-duration-threshold: 10s
         slow-call-rate-threshold: 20
         failure-rate-threshold: 20

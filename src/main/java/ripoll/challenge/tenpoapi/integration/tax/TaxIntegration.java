@@ -1,6 +1,7 @@
 package ripoll.challenge.tenpoapi.integration.tax;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
 import ripoll.challenge.tenpoapi.exception.CannotRetrieveTaxException;
 import ripoll.challenge.tenpoapi.integration.tax.response.TaxPercentage;
 import ripoll.challenge.tenpoapi.model.TaxCacheEntry;
@@ -47,7 +48,8 @@ public class TaxIntegration {
 
     private Double askForTaxValue() {
         try {
-            return Optional.ofNullable(taxRestClient.getCurrentTaxPercentage().getBody())
+            return Optional.ofNullable(taxRestClient.getCurrentTaxPercentage())
+                    .map(HttpEntity::getBody)
                     .map(TaxPercentage::tax_percentage)
                     .orElse(null);
         } catch (Exception e) {

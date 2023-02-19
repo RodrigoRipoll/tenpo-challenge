@@ -1,6 +1,7 @@
 package ripoll.challenge.tenpoapi.controller;
 
 import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import java.util.Optional;
 public class RequestLogController {
 
     private final static String VALIDATION_SIZE_MESSAGE = "This is an optional field. If used, it cannot be less than 1 or greater than 20.";
+    public static final String ENDPOINT_REQUEST_LOG_HISTORY = "/accountant/request_log/history";
     private final RequestLogService requestLogService;
 
     @Autowired
@@ -26,14 +28,16 @@ public class RequestLogController {
         this.requestLogService = requestLogService;
     }
 
-    @GetMapping("/accountant/request_log/history")
+    @GetMapping(ENDPOINT_REQUEST_LOG_HISTORY)
     public ResponseEntity<Page<RequestLog>> getRequestLogHistory(
-            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "0")
+            @PositiveOrZero
+            Integer page,
             @RequestParam(required = false, defaultValue = "5")
             @Min(value = 1 , message = VALIDATION_SIZE_MESSAGE)
             @Max(value = 20 , message = VALIDATION_SIZE_MESSAGE)
             Integer size) {
-        return Optional.of(requestLogService.getAllLogs(page, size))
+        return Optional.ofNullable(requestLogService.getAllLogs(page, size))
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
