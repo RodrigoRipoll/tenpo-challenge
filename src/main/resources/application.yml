@@ -16,3 +16,26 @@ info:
 spring:
   profiles:
     active: dev
+  datasource:
+    url: jdbc:postgresql://localhost:5432/tenpo-tracks
+    username: tenpo-user
+    password: tenpo-password
+  sql:
+    init:
+      mode: always
+
+redis_url_connection: redis://localhost:6379
+
+cache:
+  duration: 2h
+
+tax:
+  expire: 30m
+
+integrations:
+  base_url:
+    tax: "tenpo-tax-api"
+
+springdoc:
+  swagger-ui:
+    configUrl: /swagger.yaml

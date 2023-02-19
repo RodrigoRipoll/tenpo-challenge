@@ -6,9 +6,9 @@ import java.time.Instant;
 public record TaxCacheEntry(
         Long createAt,
         Long expirationAt,
-        Double tax
+        double tax
 ) {
-    public TaxCacheEntry(Double tax, Duration validWindow) {
+    public  TaxCacheEntry(double tax, Duration validWindow) {
         this(Instant.now().toEpochMilli(), Instant.now().plusMillis(validWindow.toMillis()).toEpochMilli(), tax);
     }
 

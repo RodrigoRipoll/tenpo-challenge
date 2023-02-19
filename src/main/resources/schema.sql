@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS Request_Log;
+DROP TABLE IF EXISTS request_log;
 
-CREATE TABLE Request_Log(
+CREATE TABLE request_log (
     id serial primary key,
     timestamp TIMESTAMP not null ,
     method varchar(20) not null,

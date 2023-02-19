@@ -1,9 +1,4 @@
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/tenpo-tracks
-    username: tenpo-user
-    password: tenpo-password
-
   sql:
     init:
       mode: always
@@ -27,3 +22,13 @@ resilience4j:
         slow-call-duration-threshold: 10s
         slow-call-rate-threshold: 60
         failure-rate-threshold: 60
+
+cache:
+  duration: 10s
+
+tax:
+  expire: 30m
+
+integrations:
+  base_url:
+    tax: "http://localhost:8081"

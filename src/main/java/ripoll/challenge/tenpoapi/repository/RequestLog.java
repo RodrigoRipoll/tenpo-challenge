@@ -11,8 +11,8 @@ import java.sql.Timestamp;
 
 @Entity
 @Data
-@Table(name = "Request_Log")
-public class RequestLogRepository {
+@Table(name = "request_log")
+public class RequestLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

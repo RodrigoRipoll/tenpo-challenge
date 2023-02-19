@@ -2,18 +2,12 @@ package ripoll.challenge.tenpoapi.repository.memoryCache;
 
 import com.google.common.base.Preconditions;
 import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 
-import java.util.concurrent.TimeUnit;
-
-public class MemoryCacheCache<T> implements IMemoryCache<T> {
+public class MemoryCache<T> implements IMemoryCache<T> {
     private final Cache<String, T> cache;
 
-    public MemoryCacheCache(int expiryDuration, TimeUnit timeUnit) {
-        this.cache = CacheBuilder.newBuilder()
-                .expireAfterWrite(expiryDuration, timeUnit)
-                .concurrencyLevel(Runtime.getRuntime().availableProcessors())
-                .build();
+    public MemoryCache(Cache<String, T> cache) {
+        this.cache = cache;
     }
 
     public T get(String key) {

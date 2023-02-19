@@ -1,48 +1,58 @@
 package ripoll.challenge.tenpoapi.integration.tax;
 
+import org.springframework.beans.factory.annotation.Value;
+import ripoll.challenge.tenpoapi.exception.CannotRetrieveTaxException;
 import ripoll.challenge.tenpoapi.integration.tax.response.TaxPercentage;
 import ripoll.challenge.tenpoapi.model.TaxCacheEntry;
-import ripoll.challenge.tenpoapi.repository.memoryCache.MemoryCacheCache;
+import ripoll.challenge.tenpoapi.repository.memoryCache.MemoryCache;
 
 import java.time.Duration;
 import java.util.Optional;
 
 public class TaxIntegration {
 
-    private final MemoryCacheCache<TaxCacheEntry> cache;
+    public static final String TAX_CACHE_KEY = "tax";
+    private final MemoryCache<TaxCacheEntry> cache;
     private final TaxRestClient taxRestClient;
-    private final Duration validityTimeOfTax = Duration.ofMinutes(30);
 
-    public TaxIntegration(TaxRestClient taxRestClient, MemoryCacheCache<TaxCacheEntry> employeeCache) {
+    @Value("${tax.expire}")
+    private final Duration timeToExpireTax = Duration.ofMinutes(30);
+
+    public TaxIntegration(TaxRestClient taxRestClient, MemoryCache<TaxCacheEntry> taxCache) {
         this.taxRestClient = taxRestClient;
-        this.cache = employeeCache;
+        this.cache = taxCache;
     }
 
-    public Double getCurrentTaxAsPercentage() {
-        var cacheItem = cache.get("tax");
+    public double getCurrentTaxAsPercentage() {
+        TaxCacheEntry taxCacheEntry = cache.get(TAX_CACHE_KEY);
 
-        return Optional.ofNullable(cacheItem)
+        return Optional.ofNullable(taxCacheEntry)
                 .filter(item -> !item.isExpired())
                 .map(TaxCacheEntry::tax)
-                .orElseGet(() -> {
-                    Double askedTax = askForTaxValue();
-                    if (askedTax == null && cacheItem == null) {
-                        throw new RuntimeException("Tax not found");
-                    }
-                    if (askedTax != null) {
-                        cache.add("tax", new TaxCacheEntry(askedTax, validityTimeOfTax));
-                        return askedTax;
-                    } else {
-                        return cacheItem.tax();
-                    }
-                });
+                .orElseGet(()-> retrieveTaxFromCacheOrServer(taxCacheEntry));
+    }
+
+    private double retrieveTaxFromCacheOrServer(TaxCacheEntry fallback) {
+        Double serverTax = askForTaxValue();
+        if (serverTax == null && fallback == null) {
+            throw new CannotRetrieveTaxException();
+        }
+        if (serverTax != null) {
+            cache.add(TAX_CACHE_KEY, new TaxCacheEntry(serverTax, timeToExpireTax));
+            return serverTax;
+        } else {
+            return fallback.tax();
+        }
     }
 
     private Double askForTaxValue() {
-        return Optional.ofNullable(taxRestClient.getCurrentTaxPercentage().getBody())
-                .map(TaxPercentage::tax_percentage)
-                .orElse(null);
+        try {
+            return Optional.ofNullable(taxRestClient.getCurrentTaxPercentage().getBody())
+                    .map(TaxPercentage::tax_percentage)
+                    .orElse(null);
+        } catch (Exception e) {
+            return  null;
+        }
     }
-
 }
 

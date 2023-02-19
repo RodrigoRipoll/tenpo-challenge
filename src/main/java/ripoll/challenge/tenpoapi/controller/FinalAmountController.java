@@ -22,7 +22,7 @@ public class FinalAmountController {
         this.accountantService = accountantService;
     }
 
-    @PostMapping("/accountant/transaction/final_value")
+    @PostMapping("/accountant/payments/brief")
     public ResponseEntity<PaymentBrief> getTotalWithTaxes(@Valid @RequestBody PaymentTransaction paymentTransaction) {
         return accountantService.getPaymentBrief(paymentTransaction)
                 .map(ResponseEntity::ok)

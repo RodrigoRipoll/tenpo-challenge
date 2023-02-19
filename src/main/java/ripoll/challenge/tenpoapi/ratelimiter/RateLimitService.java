@@ -7,7 +7,6 @@ import io.github.bucket4j.BucketConfiguration;
 import io.github.bucket4j.Refill;
 import io.github.bucket4j.distributed.proxy.ProxyManager;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -16,8 +15,11 @@ import java.util.function.Supplier;
 @Service
 public class RateLimitService {
 
+    final ProxyManager<String> proxyManager;
     @Autowired
-    ProxyManager<String> proxyManager;
+    public RateLimitService(ProxyManager<String> proxyManager) {
+        this.proxyManager = proxyManager;
+    }
 
     public Bucket resolveBucket(String key) {
         Supplier<BucketConfiguration> configSupplier = getConfigSupplier();

@@ -1,0 +1,131 @@
+openapi: 3.0.1
+
+info:
+  title: API TENPO
+  description: Application for TENPO - Backend Sr Software Engineer
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /accountant/payments/brief:
+    post:
+      summary: Obtener el resumen de un pago con impuestos
+      requestBody:
+        description: Objeto PaymentTransaction para calcular los impuestos y obtener el resumen de pago
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentTransaction'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentBrief'
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error - It could be for different reasons, one of them because there is no data in the tax cache and the corresponding api cannot be consulted.
+    servers:
+      - url: http://localhost:8080
+  /accountant/request_log/history:
+    get:
+      summary: Obtener historial de logs de solicitudes
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 0
+          description: Número de página
+        - in: query
+          name: size
+          schema:
+            type: integer
+            default: 5
+            minimum: 1
+            maximum: 20
+          description: Tamaño de la página (no puede ser menor a 1 ni mayor a 20)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RequestLog'
+                  pageable:
+                    $ref: '#/components/schemas/Pageable'
+                  totalPages:
+                    type: integer
+                  totalElements:
+                    type: integer
+                  last:
+                    type: boolean
+                  size:
+                    type: integer
+                  number:
+                    type: integer
+                  sort:
+                    $ref: '#/components/schemas/Sort'
+                  numberOfElements:
+                    type: integer
+                  first:
+                    type: boolean
+                  empty:
+                    type: boolean
+        '400':
+          description: Bad Request
+    servers:
+      - url: http://localhost:8080
+
+components:
+  schemas:
+    RequestLog:
+      type: object
+      properties:
+        id:
+          type: integer
+        requestDate:
+          type: string
+          format: date-time
+        method:
+          type: string
+        url:
+          type: string
+        statusCode:
+          type: integer
+        executionTime:
+          type: integer
+    PaymentTransaction:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: double
+        taxRate:
+          type: number
+          format: double
+        currency:
+          type: string
+        taxIncluded:
+          type: boolean
+    PaymentBrief:
+      type: object
+      properties:
+        totalAmount:
+          type: number
+          format: double
+        taxAmount:
+          type: number
+          format: double
+        currency:
+          type: string

@@ -6,24 +6,33 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 import ripoll.challenge.tenpoapi.repository.IRequestLogRepository;
-import ripoll.challenge.tenpoapi.repository.RequestLogRepository;
+import ripoll.challenge.tenpoapi.repository.RequestLog;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 
 @Component
-@Order(-999)
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class RequestLoggingFilter extends OncePerRequestFilter {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RequestLoggingFilter.class);
+
+    private final ObjectMapper objectMapper;
 
     private final IRequestLogRepository IRequestLogRepository;
 
-    public RequestLoggingFilter(IRequestLogRepository IRequestLogRepository) {
+    public RequestLoggingFilter(ObjectMapper objectMapper, IRequestLogRepository IRequestLogRepository) {
+        this.objectMapper = objectMapper;
         this.IRequestLogRepository = IRequestLogRepository;
     }
 
@@ -35,34 +44,34 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, resp);
 
-        RequestLogRepository requestLogRepository = getRequestLogRepository(request, response, resp);
+        RequestLog requestLog = getRequestLogRepository(request, response, resp);
 
         resp.copyBodyToResponse();
-        this.saveWithDelay(requestLogRepository);
+
+        if (requestLog != null) this.saveAsync(requestLog);
     }
 
-    private static RequestLogRepository getRequestLogRepository(HttpServletRequest request, HttpServletResponse response, ContentCachingResponseWrapper resp) throws IOException {
-        byte[] responseBody = resp.getContentAsByteArray();
-        String responseBodyString = new String(responseBody, StandardCharsets.UTF_8);
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode responseJson = objectMapper.readTree(responseBodyString);
+    RequestLog getRequestLogRepository(HttpServletRequest request, HttpServletResponse response, ContentCachingResponseWrapper resp) {
+        try {
+            byte[] responseBody = resp.getContentAsByteArray();
+            String responseBodyString = new String(responseBody, StandardCharsets.UTF_8);
+            JsonNode responseJson = objectMapper.readTree(responseBodyString);
 
-        RequestLogRepository requestLogRepository = new RequestLogRepository();
-        requestLogRepository.setTimestamp(new Timestamp(System.currentTimeMillis()));
-        requestLogRepository.setMethod(request.getMethod());
-        requestLogRepository.setUri(request.getRequestURI());
-        requestLogRepository.setStatusCode(response.getStatus());
-        requestLogRepository.setResponse(responseJson);
-        return requestLogRepository;
+            RequestLog requestLog = new RequestLog();
+            requestLog.setTimestamp(new Timestamp(System.currentTimeMillis()));
+            requestLog.setMethod(request.getMethod());
+            requestLog.setUri(request.getRequestURI());
+            requestLog.setStatusCode(response.getStatus());
+            requestLog.setResponse(responseJson);
+            return requestLog;
+        } catch (IOException e) {
+            LOGGER.error("Failed to parse response body: {}", e.getMessage());
+            return null;
+        }
     }
 
-    //@Async
-    void saveWithDelay(RequestLogRepository requestLogRepository){
-//        try {
-//            Thread.sleep(3000);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
-        IRequestLogRepository.save(requestLogRepository);
+    @Async
+    void saveAsync(RequestLog requestLog) {
+        IRequestLogRepository.save(requestLog);
     }
 }
