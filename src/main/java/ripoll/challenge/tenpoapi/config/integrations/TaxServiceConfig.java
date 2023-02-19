@@ -15,7 +15,7 @@ import ripoll.challenge.tenpoapi.repository.memoryCache.MemoryCache;
 @Configuration
 public class TaxServiceConfig {
 
-    @Value("${integrations.base_url.tax}")
+    @Value("${integrations.base-url.tax}")
     private String taxIntegrationBaseUrl;
 
     @Bean

@@ -1,15 +1,17 @@
-version: '3.8'
+version: '1.0'
 
 services:
-#  tenpo-api:
-#    container_name: "tenpo-challenge"
-#    build:
-#      context: .
-#    ports:
-#      - "8080:8080"
-#    depends_on:
-#      - db
-#      - cache
+  tenpo-api:
+    container_name: "tenpo-challenge"
+    build:
+      context: .
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - cache
 
   db:
     image: postgres:13.1-alpine

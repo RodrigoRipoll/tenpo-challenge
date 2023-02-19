@@ -14,8 +14,6 @@ info:
     author: Rodrigo Ripoll
     version: '@project.version@'
 spring:
-  profiles:
-    active: dev
   datasource:
     url: jdbc:postgresql://localhost:5432/tenpo-tracks
     username: tenpo-user
@@ -24,7 +22,31 @@ spring:
     init:
       mode: always
 
-redis_url_connection: redis://localhost:6379
+#spring:
+#  profiles:
+#    active: dev
+
+redisUrlConnection: redis://localhost:6379
+
+resilience4j:
+  retry:
+    instances:
+      myRetry:
+        max-attempts: 3
+        wait-duration: 100ms
+        enable-exponential-backoff: true
+        exponential-backoff-multiplier: 2
+  circuitbreaker:
+    instances:
+      myCircuitBreaker:
+        wait-duration-in-open-state: 1m
+        permitted-number-of-calls-in-half-open-state: 5
+        sliding-window-type: count-based
+        sliding-window-size: 5
+        minimum-number-of-calls: 5
+        slow-call-duration-threshold: 10s
+        slow-call-rate-threshold: 20
+        failure-rate-threshold: 20
 
 cache:
   duration: 2h
@@ -32,8 +54,11 @@ cache:
 tax:
   expire: 30m
 
+rate-limit:
+  rpm: 3000
+
 integrations:
-  base_url:
+  base-url:
     tax: "tenpo-tax-api"
 
 springdoc:

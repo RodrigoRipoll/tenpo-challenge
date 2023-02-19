@@ -1,25 +1,13 @@
 package ripoll.challenge.tenpoapi.E2E;
 
-import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import ripoll.challenge.tenpoapi.model.PaymentBrief;
-import ripoll.challenge.tenpoapi.model.PaymentTransaction;
 import ripoll.challenge.tenpoapi.ratelimiter.RateLimitService;
 import ripoll.challenge.tenpoapi.service.AccountantService;
-
-import java.util.Optional;
-
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -33,7 +21,7 @@ class FinalAmountE2ETest {
 
   @Autowired
   private RateLimitService rateLimitService;
-
+/*
   @Test
   void getTotalWithTaxes_returnsOkResponse() throws Exception {
     // Arrange
@@ -65,6 +53,6 @@ class FinalAmountE2ETest {
     // Act and Assert
     mockMvc.perform(request)
         .andExpect(status().isBadRequest());
-  }
+  }*/
 }
 

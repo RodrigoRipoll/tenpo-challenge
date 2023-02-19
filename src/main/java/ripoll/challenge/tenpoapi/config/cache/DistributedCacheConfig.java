@@ -1,4 +1,4 @@
-package ripoll.challenge.tenpoapi.config.ratelimiter;
+package ripoll.challenge.tenpoapi.config.cache;
 
 import io.github.bucket4j.distributed.proxy.ProxyManager;
 import io.github.bucket4j.grid.jcache.JCacheProxyManager;
@@ -16,7 +16,7 @@ import javax.cache.Caching;
 @Configuration
 public class DistributedCacheConfig {
 
-    @Value("${redis_url_connection}")
+    @Value("${redisUrlConnection}")
     private String redisUrlConnection;
     @Bean
     public RedissonClient redissonClient() {

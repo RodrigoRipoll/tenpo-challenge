@@ -57,7 +57,7 @@ class TenpoApiApplicationTests {
 		registry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
 		registry.add("spring.datasource.password", postgreSQLContainer::getPassword);
 		registry.add("spring.datasource.username", postgreSQLContainer::getUsername);
-		registry.add("redis.host", () -> String.format("redis://%s:%d", redisContainer.getHost(), redisContainer.getFirstMappedPort()));
+		registry.add("redisUrlConnection", () -> String.format("redis://%s:%d", redisContainer.getHost(), redisContainer.getFirstMappedPort()));
 	}
 
 	@Autowired
