@@ -26,7 +26,3 @@ tax:
 
 rate-limit:
   rpm: 15
-
-integrations:
-  base-url:
-    tax: "http://localhost:8081"

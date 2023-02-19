@@ -22,11 +22,7 @@ spring:
     init:
       mode: always
 
-#spring:
-#  profiles:
-#    active: dev
-
-redisUrlConnection: redis://localhost:6379
+redisUrlConnection: "redis://localhost:6379"
 
 resilience4j:
   retry:
@@ -59,7 +55,7 @@ rate-limit:
 
 integrations:
   base-url:
-    tax: "tenpo-tax-api"
+    tax: "http://localhost:8081"
 
 springdoc:
   swagger-ui:

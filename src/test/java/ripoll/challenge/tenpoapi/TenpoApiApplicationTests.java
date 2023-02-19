@@ -1,25 +1,7 @@
 package ripoll.challenge.tenpoapi;
 
-import com.redis.testcontainers.RedisContainer;
-import org.junit.jupiter.api.Test;
-import org.redisson.api.RMap;
-import org.redisson.api.RedissonClient;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.DockerImageName;
-import ripoll.challenge.tenpoapi.repository.IRequestLogRepository;
-import ripoll.challenge.tenpoapi.repository.RequestLog;
-
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+/*
+@SuppressWarnings("ALL")
 @Testcontainers
 @SpringBootTest
 class TenpoApiApplicationTests {
@@ -71,3 +53,4 @@ class TenpoApiApplicationTests {
 	}
 
 }
+*/

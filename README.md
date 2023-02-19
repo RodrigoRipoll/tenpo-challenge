@@ -17,19 +17,19 @@ In the root folder we have a docker-compose:
     - makes use of a Image in Docker-hub to start **the Auxiliary Tax API**
         - image: ripollrodrigo/tenpo_tax_percentage:lastest
     - **TENPO APP** is built from the `Dockerfile`
-    - **run command**: `docker-compose up` or `docker-compose up --build`
-      -Important inside docker-compose we can find `SPRING_PROFILES_ACTIVE=dev`, this can take 2 values **dev** or **prod**
-      each one provides us with different settings in the general environment variables, such as CB, cache, expiration times.
-      It is set as **prod** but you can change and build again, including changing the parameters in the `application-dev.yml`
-      or `application.yml` files.
-        ```
-            |                       	|       dev      	|          prod         	|
-            |-----------------------	|:--------------:	|:---------------------:	|
-            | rate limit            	|      15rpm     	|        3000rpm        	|
-            | time to retry         	| 5s - 10s - 20s 	| 100ms - 200ms - 400ms 	|
-            | cache in memory "tax" 	|       4m       	|           2h          	|
-            | expiration tax        	|       2m       	|         30min         	|
-            | file .yml             	|application-dev.yml|     application.yml     	|
+      - **run command**: `docker-compose up` or `docker-compose up --build`
+        -Important inside the docker compose you will find the `SPRING_PROFILES_ACTIVE` variable that if it takes 
+         the value `dev` it will take the configuration of the `application-dev.yml` file, if it takes **any other value 
+         it will take the default** configuration which is where we have the **"productive" values**.
+
+          ```
+              |                       	|       dev      	|      prod - default       |
+              |-----------------------	|:--------------:	|:---------------------:	|
+              | rate limit            	|      15rpm     	|        3000rpm        	|
+              | time to retry         	| 5s - 10s - 20s 	| 100ms - 200ms - 400ms 	|
+              | cache in memory "tax" 	|       4m       	|           2h          	|
+              | expiration tax        	|       2m       	|         30min         	|
+              | file .yml             	|application-dev.yml|     application.yml     	|
 
     - The `port 8080` of **the TENPO API** is exposed to be able to interact with it through `localhost:8080`
     - The `port 8081` of **the Auxiliary Tax API** is exposed to be able to interact with it through `localhost:8081`

@@ -7,6 +7,12 @@ services:
       context: .
     environment:
       - SPRING_PROFILES_ACTIVE=dev
+      - redisUrlConnection=redis://distributed-cache:6379
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/tenpo-tracks
+      - SPRING_DATASOURCE_USERNAME=tenpo-user
+      - SPRING_DATASOURCE_PASSWORD=tenpo-password
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - integrations_base-url_tax=http://tax-api:8080
     ports:
       - "8080:8080"
     depends_on:
@@ -19,18 +25,29 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: tenpo-tracks
-      POSTGRES_USER: tenpo-user
-      POSTGRES_PASSWORD: tenpo-password
+      - POSTGRES_DB=tenpo-tracks
+      - POSTGRES_USER=tenpo-user
+      - POSTGRES_PASSWORD=tenpo-password
 
   cache:
-    container_name: "distributed-cache"
+    container_name: distributed-cache
     image: redis/redis-stack:6.2.6-v2
     ports:
       - "6379:6379"
       - "8001:8001"
 
   tenpo-tax-api:
+    container_name: tax-api
     image: ripollrodrigo/tenpo_tax_percentage:lastest
     ports:
       - "8081:8080"
+
+#  pgadmin:
+#    container_name: pgadmin4_container
+#    image: dpage/pgadmin4
+#    restart: always
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: tenpo.admin@admin.com
+#      PGADMIN_DEFAULT_PASSWORD: tenpo.root
+#    ports:
+#      - "5050:80"
