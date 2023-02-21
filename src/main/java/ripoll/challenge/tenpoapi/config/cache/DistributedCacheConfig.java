@@ -1,7 +1,5 @@
 package ripoll.challenge.tenpoapi.config.cache;
 
-import io.github.bucket4j.distributed.proxy.ProxyManager;
-import io.github.bucket4j.grid.jcache.JCacheProxyManager;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
@@ -12,6 +10,8 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.cache.CacheManager;
 import javax.cache.Caching;
+
+import static ripoll.challenge.tenpoapi.config.ratelimiter.RateLimitServiceConfig.RATE_LIMIT_CACHE_NAME;
 
 @Configuration
 public class DistributedCacheConfig {
@@ -25,13 +25,8 @@ public class DistributedCacheConfig {
     @Bean
     public CacheManager cacheManager(RedissonClient redissonClient) {
         CacheManager manager = Caching.getCachingProvider().getCacheManager();
-        manager.createCache("cache", RedissonConfiguration.fromConfig(redissonClient.getConfig()));
+        manager.createCache(RATE_LIMIT_CACHE_NAME, RedissonConfiguration.fromConfig(redissonClient.getConfig()));
         return manager;
-    }
-
-    @Bean
-    ProxyManager<String> proxyManager(CacheManager cacheManager) {
-        return new JCacheProxyManager<>(cacheManager.getCache("cache"));
     }
 
     private Config getRedissonConfig() {

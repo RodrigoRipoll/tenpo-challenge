@@ -1,23 +1,23 @@
 version: '1.0'
 
 services:
-  tenpo-api:
-    container_name: "tenpo-challenge"
-    build:
-      context: .
-    environment:
-      - SPRING_PROFILES_ACTIVE=prod
-      - redisUrlConnection=redis://distributed-cache:6379
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/tenpo-tracks
-      - SPRING_DATASOURCE_USERNAME=tenpo-user
-      - SPRING_DATASOURCE_PASSWORD=tenpo-password
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-      - integrations_base-url_tax=http://tax-api:8080
-    ports:
-      - "8080:8080"
-    depends_on:
-      - db
-      - cache
+#  tenpo-api:
+#    container_name: "tenpo-challenge"
+#    build:
+#      context: .
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=prod
+#      - redisUrlConnection=redis://distributed-cache:6379
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/tenpo-tracks
+#      - SPRING_DATASOURCE_USERNAME=tenpo-user
+#      - SPRING_DATASOURCE_PASSWORD=tenpo-password
+#      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+#      - integrations_base-url_tax=http://tax-api:8080
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - db
+#      - cache
 
   db:
     image: postgres:13.1-alpine

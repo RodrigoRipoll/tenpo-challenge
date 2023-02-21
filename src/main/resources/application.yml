@@ -51,7 +51,12 @@ tax:
   expire: 30m
 
 rate-limit:
-  rpm: 3000
+  default:
+    rpm: 10
+  alpha:
+    rpm: 1000
+  beta:
+    rpm: 3000
 
 integrations:
   base-url:

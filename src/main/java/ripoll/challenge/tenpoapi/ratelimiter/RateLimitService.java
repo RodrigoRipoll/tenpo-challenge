@@ -1,34 +1,30 @@
 package ripoll.challenge.tenpoapi.ratelimiter;
 
-import io.github.bucket4j.Bandwidth;
+import com.google.common.base.Preconditions;
 import io.github.bucket4j.Bucket;
 import io.github.bucket4j.BucketConfiguration;
-import io.github.bucket4j.Refill;
 import io.github.bucket4j.distributed.proxy.ProxyManager;
-import org.springframework.beans.factory.annotation.Value;
+import jakarta.validation.constraints.NotNull;
 
-import java.time.Duration;
+import java.util.Map;
 import java.util.function.Supplier;
+
+import static ripoll.challenge.tenpoapi.config.ratelimiter.RateLimitServiceConfig.DEFAULT_RATE_LIMIT;
 
 public class RateLimitService {
 
-    @Value("${rate-limit.rpm}")
-    private long rpmAllowed;
-
     final ProxyManager<String> proxyManager;
 
-    public RateLimitService(ProxyManager<String> proxyManager) {
+    final Map<String, Supplier<BucketConfiguration>> bucketConfigurationRegistry;
+
+    public RateLimitService(ProxyManager<String> proxyManager, Map<String, Supplier<BucketConfiguration>> bucketConfigurationRegistry) {
         this.proxyManager = proxyManager;
+        this.bucketConfigurationRegistry = bucketConfigurationRegistry;
     }
 
-    public Bucket resolveBucket(String key) {
-        Supplier<BucketConfiguration> configSupplier = getConfigSupplier();
-        return proxyManager.builder().build(key, configSupplier);
-    }
-
-    private Supplier<BucketConfiguration> getConfigSupplier() {
-        Refill refill = Refill.intervally(rpmAllowed, Duration.ofMinutes(1));
-        Bandwidth limit = Bandwidth.classic(rpmAllowed, refill);
-        return () -> (BucketConfiguration.builder().addLimit(limit).build());
+    public Bucket resolveBucket(@NotNull String apiKey) {
+        Preconditions.checkNotNull(apiKey, "api-key cannot be null at this point");
+        var rateLimitKey = bucketConfigurationRegistry.containsKey(apiKey) ? apiKey : DEFAULT_RATE_LIMIT;
+        return proxyManager.builder().build(rateLimitKey, bucketConfigurationRegistry.get(rateLimitKey));
     }
 }
