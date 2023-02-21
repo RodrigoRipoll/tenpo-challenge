@@ -11,7 +11,7 @@ public class RequestLogServiceConfig {
 
   @Bean
   @Autowired
-  public RequestLogService accountantService(IRequestLogRepository IRequestLogRepository) {
+  public RequestLogService requestLogService(IRequestLogRepository IRequestLogRepository) {
     return new RequestLogService(IRequestLogRepository);
   }
 }

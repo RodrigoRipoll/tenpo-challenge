@@ -36,7 +36,7 @@ class ControllersE2ETest extends IntegrationTest {
         MockServiceMother.integrationTaxError500();
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/accountant/payments/brief")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"firstTxAmount\":80,\"secondTxAmount\":20}");
+                .content("{\"first_tx_amount\":80,\"second_tx_amount\":20}");
 
         // Act and Assert
         mockMvc.perform(request)
@@ -51,7 +51,7 @@ class ControllersE2ETest extends IntegrationTest {
         memoryTaxCache.add("tax", new TaxCacheEntry(50.0d, Duration.ofHours(-1L))); //expire
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/accountant/payments/brief")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"firstTxAmount\":40,\"secondTxAmount\":10}");
+                .content("{\"first_tx_amount\":40,\"second_tx_amount\":10}");
 
         // Act and Assert
         mockMvc.perform(request)
@@ -70,7 +70,7 @@ class ControllersE2ETest extends IntegrationTest {
         memoryTaxCache.add("tax", new TaxCacheEntry(50.0d, Duration.ofHours(-1L))); //expire
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/accountant/payments/brief")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"firstTxAmount\":40,\"secondTxAmount\":10}");
+                .content("{\"first_tx_amount\":40,\"second_tx_amount\":10}");
 
         // Act and Assert
         mockMvc.perform(request)
@@ -89,7 +89,7 @@ class ControllersE2ETest extends IntegrationTest {
         memoryTaxCache.add("tax", new TaxCacheEntry(25d, Duration.ofMinutes(1L))); //not expire
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/accountant/payments/brief")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"firstTxAmount\":40,\"secondTxAmount\":10}");
+                .content("{\"first_tx_amount\":40,\"second_tx_amount\":10}");
 
         // Act and Assert
         mockMvc.perform(request)
@@ -106,7 +106,7 @@ class ControllersE2ETest extends IntegrationTest {
         // Arrange
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post(ENDPOINT_PAYMENTS_BRIEF)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"firstTxAmount\":-1,\"secondTxAmount\":33}");
+                .content("{\"first_tx_amount\":-1,\"second_tx_amount\":33}");
 
         // Act and Assert
         mockMvc.perform(request)

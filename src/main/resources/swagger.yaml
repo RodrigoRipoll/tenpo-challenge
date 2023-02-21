@@ -63,7 +63,7 @@ paths:
                     items:
                       $ref: '#/components/schemas/RequestLog'
                   pageable:
-                    $ref: '#/components/schemas/Pageable'
+                    $ref: '#/components/schemas/pageable'
                   totalPages:
                     type: integer
                   totalElements:
@@ -75,7 +75,7 @@ paths:
                   number:
                     type: integer
                   sort:
-                    $ref: '#/components/schemas/Sort'
+                    $ref: '#/components/schemas/sort'
                   numberOfElements:
                     type: integer
                   first:
@@ -94,38 +94,122 @@ components:
       properties:
         id:
           type: integer
-        requestDate:
+        timestamp:
           type: string
           format: date-time
         method:
           type: string
-        url:
+        uri:
           type: string
-        statusCode:
+        status_code:
           type: integer
-        executionTime:
-          type: integer
+        response:
+          type: object
+          description: depende del endpoint el body
     PaymentTransaction:
       type: object
       properties:
-        amount:
+        first_tx_amount:
           type: number
           format: double
-        taxRate:
+          description: Monto de la primera transacción de pago
+        second_tx_amount:
           type: number
           format: double
-        currency:
-          type: string
-        taxIncluded:
-          type: boolean
+          description: Monto de la segunda transacción de pago
+    Payments:
+      type: object
+      properties:
+        first_tx_amount:
+          type: number
+          format: double
+          description: Monto de la primera transacción de pago
+        second_tx_amount:
+          type: number
+          format: double
+          description: Monto de la segunda transacción de pago
+        total_payments:
+          type: number
+          format: double
+          description: Monto total de los pagos
     PaymentBrief:
       type: object
       properties:
-        totalAmount:
+        payments:
+          $ref: '#/components/schemas/Payments'
+          description: Datos de las trasacciones de los pagos
+        taxes:
           type: number
-          format: double
-        taxAmount:
+          format: float
+          description: Monto de los impuestos
+        total_amount:
           type: number
-          format: double
-        currency:
-          type: string
+          format: float
+          description: Monto total
+    pageable:
+      type: object
+      properties:
+        sort:
+          type: object
+          properties:
+            empty:
+              type: boolean
+            sorted:
+              type: boolean
+            unsorted:
+              type: boolean
+        offset:
+          type: integer
+          format: int64
+        page_number:
+          type: integer
+          format: int32
+        page_size:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
+      required:
+        - sort
+        - offset
+        - page_number
+        - page_size
+        - paged
+        - unpaged
+    last:
+      type: boolean
+    total_pages:
+      type: integer
+      format: int32
+    total_elements:
+      type: integer
+      format: int32
+    size:
+      type: integer
+      format: int32
+    number:
+      type: integer
+      format: int32
+    sort:
+      type: object
+      properties:
+        empty:
+          type: boolean
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+      required:
+        - empty
+        - sorted
+        - unsorted
+    first:
+      type: boolean
+    number_of_elements:
+      type: integer
+      format: int32
+    empty:
+      type: boolean
+
