@@ -26,8 +26,10 @@ dependencies {
 	implementation 'javax.validation:validation-api:2.0.1.Final'
 	implementation 'io.vavr:vavr:0.10.2'
 
-	implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j:3.0.0'
-	implementation 'org.springframework:spring-aspects:6.0.4'
+	//implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j:3.0.0'
+	implementation 'io.github.resilience4j:resilience4j-circuitbreaker:1.7.1'
+	implementation 'io.github.resilience4j:resilience4j-retry:1.7.1'
+	//implementation 'org.springframework:spring-aspects:6.0.4'
 	implementation('com.giffing.bucket4j.spring.boot.starter:bucket4j-spring-boot-starter:0.5.2') {
 		exclude group: 'org.ehcache', module: 'ehcache'
 	}
@@ -40,6 +42,7 @@ dependencies {
 
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
+	//compile('org.springframework.boot:spring-boot-starter-actuator')
 	compileOnly 'org.projectlombok:lombok'
 
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'

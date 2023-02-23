@@ -29,7 +29,8 @@ public class TaxIntegrationTest {
   @BeforeEach
   void setUp() {
     MockitoAnnotations.openMocks(this);
-    taxIntegration = new TaxIntegration(taxRestClient, memoryCache);
+    taxIntegration = new TaxIntegration(taxRestClient, memoryCache, retryRegistry.retry(TAX_INTEGRATION_RETRY, TAX_INTEGRATION_RETRY),
+        circuitBreakerRegistry.circuitBreaker(TAX_INTEGRATION_CB, TAX_INTEGRATION_CB));
   }
 
   @Test

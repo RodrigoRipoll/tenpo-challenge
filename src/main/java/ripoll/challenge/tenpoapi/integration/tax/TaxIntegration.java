@@ -1,8 +1,11 @@
 package ripoll.challenge.tenpoapi.integration.tax;
 
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.retry.Retry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import ripoll.challenge.tenpoapi.exception.CannotRetrieveTaxException;
+import ripoll.challenge.tenpoapi.integration.ResilientIntegration;
 import ripoll.challenge.tenpoapi.integration.tax.response.TaxPercentage;
 import ripoll.challenge.tenpoapi.model.TaxCacheEntry;
 import ripoll.challenge.tenpoapi.repository.memoryCache.MemoryCache;
@@ -10,7 +13,7 @@ import ripoll.challenge.tenpoapi.repository.memoryCache.MemoryCache;
 import java.time.Duration;
 import java.util.Optional;
 
-public class TaxIntegration {
+public class TaxIntegration extends ResilientIntegration {
 
     public static final String TAX_CACHE_KEY = "tax";
     private final MemoryCache<TaxCacheEntry> cache;
@@ -19,7 +22,8 @@ public class TaxIntegration {
     @Value("${tax.expire}")
     private final Duration timeToExpireTax = Duration.ofMinutes(30);
 
-    public TaxIntegration(TaxRestClient taxRestClient, MemoryCache<TaxCacheEntry> taxCache) {
+    public TaxIntegration(TaxRestClient taxRestClient, MemoryCache<TaxCacheEntry> taxCache, Retry retry, CircuitBreaker circuitBreaker) {
+        super(circuitBreaker, retry);
         this.taxRestClient = taxRestClient;
         this.cache = taxCache;
     }
@@ -47,14 +51,19 @@ public class TaxIntegration {
     }
 
     private Double askForTaxValue() {
-        try {
+        return resilienceOptionCall(taxRestClient::getCurrentTaxPercentage)
+            .map(HttpEntity::getBody)
+            .map(TaxPercentage::tax_percentage)
+            .getOrElse(() -> null);
+
+      /*  try {
             return Optional.ofNullable(taxRestClient.getCurrentTaxPercentage())
                     .map(HttpEntity::getBody)
                     .map(TaxPercentage::tax_percentage)
                     .orElse(null);
         } catch (Exception e) {
             return  null;
-        }
+        }*/
     }
 }
 

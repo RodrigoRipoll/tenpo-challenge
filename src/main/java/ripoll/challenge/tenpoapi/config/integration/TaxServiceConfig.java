@@ -1,5 +1,10 @@
 package ripoll.challenge.tenpoapi.config.integration;
 
+import static ripoll.challenge.tenpoapi.config.circuitbreaker.CircuitBreakerConfiguration.TAX_INTEGRATION_CB;
+import static ripoll.challenge.tenpoapi.config.retry.RetryConfiguration.TAX_INTEGRATION_RETRY;
+
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
+import io.github.resilience4j.retry.RetryRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -30,7 +35,15 @@ public class TaxServiceConfig {
 
     @Bean
     @Autowired
-    public TaxIntegration taxService(TaxRestClient taxRestClient, MemoryCache<TaxCacheEntry> taxCache) {
-        return new TaxIntegration(taxRestClient, taxCache);
+    public TaxIntegration taxService(TaxRestClient taxRestClient,
+                                     MemoryCache<TaxCacheEntry> taxCache,
+                                     RetryRegistry retryRegistry,
+                                     CircuitBreakerRegistry circuitBreakerRegistry) {
+        return new TaxIntegration(
+            taxRestClient,
+            taxCache,
+            retryRegistry.retry(TAX_INTEGRATION_RETRY, TAX_INTEGRATION_RETRY),
+            circuitBreakerRegistry.circuitBreaker(TAX_INTEGRATION_CB, TAX_INTEGRATION_CB)
+        );
     }
 }

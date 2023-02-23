@@ -21,20 +21,24 @@ public abstract class ResilientIntegration {
         this.retry = retry;
     }
 
-    protected <T> Option<T> optionCall(CheckedFunction0<T> supplier) {
-        return Option.of(call(supplier));
+    protected <T> Option<T> resilienceOptionCall(CheckedFunction0<T> supplier) {
+        return call(supplier).toOption();
     }
 
-    protected <T> T call(CheckedFunction0<T> supplier) {
+    private  <T> Try<T> call(CheckedFunction0<T> supplier) {
         return tryCall(supplier)
-                .recover(it -> {
-                    LOGGER.error("Couldn't call integration", it);
+                .recover(throwable -> {
+                    LOGGER.error("Couldn't call integration", throwable);
                     return null;
-                }).get();
+                });
     }
 
-    protected <T> Try<T> tryCall(CheckedFunction0<T> supplier) {
-        return Try.of(CircuitBreaker.decorateCheckedFunction(circuitBreaker, supplier));
+    private  <T> Try<T> tryCall(CheckedFunction0<T> supplier) {
+        return Try.of(CircuitBreaker
+            .decorateCheckedSupplier(circuitBreaker,
+                Retry.decorateCheckedSupplier(retry, supplier)
+            )
+        );
     }
 
 }
